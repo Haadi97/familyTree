@@ -210,4 +210,4 @@ console.log(marianne.hobby);
 console.log(eli.hobby);
 console.log(jones.ageDifference(eli, marianne));
 console.log(jones.heightDifference(eli, marianne));
-console.log(eli.catFact);
+console.log(eli.getRandomCatInfo());
