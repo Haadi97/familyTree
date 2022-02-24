@@ -134,7 +134,7 @@ class Person {
         catInfo = data.text;
       })
       .catch((error) => {
-        console.log("rejected", error);
+        return error;
       });
     return catInfo;
   };
