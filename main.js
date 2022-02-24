@@ -124,19 +124,17 @@ class Person {
     return personAge;
   }
   getRandomCatInfo = async () => {
-    let catInfo = "";
     await fetch("https://cat-fact.herokuapp.com/facts/random/")
       .then((response) => {
         //console.log("resolve", response);
         return response.json();
       })
       .then((data) => {
-        catInfo = data.text;
+        console.log(data.text);
       })
       .catch((error) => {
         return error;
       });
-    return catInfo;
   };
 
   totalSiblings() {}
