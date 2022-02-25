@@ -137,7 +137,19 @@ class Person {
       });
   };
 
-  totalSiblings() {}
+  totalSiblings() {
+    const personFamily = this._family;
+    const personSiblings = personFamily.length(
+      personFamily.map((familyMember) => {
+        if (this instanceof Son || this instanceof Daughter) {
+          return (
+            familyMember instanceof Son && familyMember instanceof Daughter
+          );
+        }
+      })
+    );
+    return personSiblings;
+  }
 
   // personsHobby() {
   //   const boyHobby = ["Football", "Gaming", "Fishing", "Sleeping"];
@@ -208,4 +220,6 @@ console.log(marianne.hobby);
 console.log(eli.hobby);
 console.log(jones.ageDifference(eli, marianne));
 console.log(jones.heightDifference(eli, marianne));
-console.log(eli.getRandomCatInfo());
+eli.getRandomCatInfo();
+
+console.log(elaine.totalSiblings);
