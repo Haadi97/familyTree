@@ -76,6 +76,14 @@ class Family {
       return `${heightOfPersonA - heightOfPersonB}cm`;
     } else return `${heightOfPersonB - heightOfPersonA}cm`;
   }
+  totalSiblings() {
+    let currentFamily = this;
+    let currentSiblings = currentFamily.map((familyMember) => {
+      if ((familyMember = familyMember instanceof Son)) {
+        return;
+      }
+    });
+  }
 }
 
 class Person {
@@ -109,9 +117,6 @@ class Person {
   get catFact() {
     return this.getRandomCatInfo();
   }
-  get totalSiblings() {
-    return this.totalSiblings();
-  }
 
   ageOfPerson() {
     var today = new Date();
@@ -124,32 +129,17 @@ class Person {
     return personAge;
   }
   getRandomCatInfo = async () => {
-    await fetch("https://cat-fact.herokuapp.com/facts/random/")
+    return await fetch("https://cat-fact.herokuapp.com/facts/random/")
       .then((response) => {
-        //console.log("resolve", response);
         return response.json();
       })
       .then((data) => {
-        console.log(data.text);
+        return data.text;
       })
       .catch((error) => {
         return error;
       });
   };
-
-  totalSiblings() {
-    const personFamily = this._family;
-    const personSiblings = personFamily.length(
-      personFamily.map((familyMember) => {
-        if (this instanceof Son || this instanceof Daughter) {
-          return (
-            familyMember instanceof Son && familyMember instanceof Daughter
-          );
-        }
-      })
-    );
-    return personSiblings;
-  }
 
   // personsHobby() {
   //   const boyHobby = ["Football", "Gaming", "Fishing", "Sleeping"];
@@ -183,6 +173,12 @@ class Father extends Person {
 class Son extends Person {
   constructor(name, birthday, height, hobby) {
     super(name, "Male", birthday, height, hobby);
+  }
+  get siblings() {
+    return this._siblings;
+  }
+  totalSiblings() {
+    let family = this._family;
   }
 }
 
@@ -220,6 +216,4 @@ console.log(marianne.hobby);
 console.log(eli.hobby);
 console.log(jones.ageDifference(eli, marianne));
 console.log(jones.heightDifference(eli, marianne));
-eli.getRandomCatInfo();
-
-console.log(elaine.totalSiblings);
+console.log(eli.catFact);
