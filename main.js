@@ -73,8 +73,13 @@ class Family {
     let heightOfPersonA = personA.height;
     let heightOfPersonB = personB.height;
     if (heightOfPersonA > heightOfPersonB) {
-      return `${heightOfPersonA - heightOfPersonB}cm`;
-    } else return `${heightOfPersonB - heightOfPersonA}cm`;
+      return `${personA.name} is taller by ${
+        heightOfPersonA - heightOfPersonB
+      }cm`;
+    } else
+      return `${personB.name} is taller by ${
+        heightOfPersonB - heightOfPersonA
+      }cm`;
   }
   totalSiblings() {
     let currentFamily = this;
@@ -117,6 +122,9 @@ class Person {
   get catFact() {
     return this.getRandomCatInfo();
   }
+  set family(family) {
+    this._family = family;
+  }
 
   ageOfPerson() {
     var today = new Date();
@@ -129,7 +137,7 @@ class Person {
     return personAge;
   }
   getRandomCatInfo = async () => {
-    return await fetch("https://cat-fact.herokuapp.com/facts/random/")
+    const catInfo = await fetch("https://cat-fact.herokuapp.com/facts/random/")
       .then((response) => {
         return response.json();
       })
@@ -139,24 +147,26 @@ class Person {
       .catch((error) => {
         return error;
       });
-  };
 
-  // personsHobby() {
-  //   const boyHobby = ["Football", "Gaming", "Fishing", "Sleeping"];
-  //   const girlHobby = ["Gardening", "Cooking", "Watching Series", "Painting"];
-  //   if (this.gender === "Female") {
-  //     return girlHobby[Math.floor(Math.random() * girlHobby.length)];
-  //   } else return boyHobby[Math.floor(Math.random() * boyHobby.length)];
-  // }
-  //   calculateHeight() {
-  //     const personsAge = this.age;
-  //     const rate = this._growth;
-  //     const maxHeight = this._maxHeight;
-  //     const height = personsAge * rate;
-  //     return (this._height = math.min(height, maxHeight));
-  //   }
-  // }
+    return catInfo;
+  };
 }
+// personsHobby() {
+//   const boyHobby = ["Football", "Gaming", "Fishing", "Sleeping"];
+//   const girlHobby = ["Gardening", "Cooking", "Watching Series", "Painting"];
+//   if (this.gender === "Female") {
+//     return girlHobby[Math.floor(Math.random() * girlHobby.length)];
+//   } else return boyHobby[Math.floor(Math.random() * boyHobby.length)];
+// }
+//   calculateHeight() {
+//     const personsAge = this.age;
+//     const rate = this._growth;
+
+//     const maxHeight = this._maxHeight;
+//     const height = personsAge * rate;
+//     return (this._height = math.min(height, maxHeight));
+//   }
+// }
 
 class Mother extends Person {
   constructor(name, birthday, height, hobby) {
@@ -179,13 +189,43 @@ class Son extends Person {
   }
   totalSiblings() {
     let family = this._family;
+    let siblings = family.map(
+      family.some((familySiblings) => {
+        if (
+          familySiblings instanceof Son &&
+          familySiblings instanceof Daughter
+        ) {
+          return family.forEach((personSiblings) => {
+            personSiblings instanceof Son && personSiblings instanceof Daughter;
+          });
+        }
+      })
+    );
+    return siblings.length;
+    //console.log(family)
   }
 }
 
 class Daughter extends Person {
   constructor(name, birthday, height, hobby) {
     super(name, "Female", birthday, height, hobby);
-    this._growth = 7.5;
+  }
+  totalSiblings() {
+    let family = this._family;
+    let siblings = family.map(
+      family.some((familySiblings) => {
+        if (
+          familySiblings instanceof Son &&
+          familySiblings instanceof Daughter
+        ) {
+          return family.forEach((personSiblings) => {
+            personSiblings instanceof Son && personSiblings instanceof Daughter;
+          });
+        }
+      })
+    );
+    return siblings.length;
+    //console.log(family)
   }
 }
 
@@ -200,7 +240,6 @@ jones.addFamilyMember(eli);
 jones.addFamilyMember(leon);
 jones.addFamilyMember(marcus);
 jones.addFamilyMember(elaine);
-console.log(marianne.family.totalFamilyMember);
 
 //jones.removeFamilyMember(marcus);
 console.log(jones.totalFamilyMember);
@@ -210,10 +249,12 @@ console.log(jones.sortFamilyAge());
 
 console.log("Eli is", eli.age, "years old.");
 console.log("Marianne is", marianne.age, "years old.");
-console.log("non", eli.birthday);
+console.log("Eli's birthday is on", eli.birthday);
 console.log(marianne.height, "cm");
 console.log(marianne.hobby);
 console.log(eli.hobby);
 console.log(jones.ageDifference(eli, marianne));
 console.log(jones.heightDifference(eli, marianne));
-console.log(eli.catFact);
+console.log(await eli.getRandomCatInfo());
+leon.totalSiblings();
+elaine.totalSiblings();
